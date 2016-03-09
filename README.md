@@ -36,3 +36,40 @@ You will get a summary for each test set up in this way,
 indicating the first failed assertion resp. success of the entire test
 plus some timing information.
 Note that `expect` and `inspect` fail when `x` throws an exception.
+
+Multiple tests and suites, including set up and tear down,
+can be set up low ceremony simply. A test suite is just a plain function.
+Of course, you can organized the suites into as many objects as you like.
+If you want parallel test execution, consider using `map` on a parallel
+collection of lazy values.
+
+    object AllTests {
+        def suite1() {
+            setup code
+            test("1") { ... }
+            ...
+            test("n") { ... }
+            teardown code
+        }
+
+        def suite2() {
+            ...
+        }
+
+        def main(args: Array[String]) {
+            // sequential
+            suite1()
+            suite2()
+
+            // parallel
+            List(suite1, suite2).par.map(_())
+        }
+    }
+
+Implementation
+--------------
+
+Implicit class `Assertions` decorates values of any type with the above
+mentioned methods. The companion object `Test` provides two exception types that
+are triggere internally, `Bug` and `Abort`, where the first signals a failed test
+and the second signals an explicit cancellation via `abort(msg)`.
