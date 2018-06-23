@@ -14,6 +14,12 @@ object Test {
     (r, end - start)
   }
 
+  def progress(m: String, i: Int, n: Int, p: Int) = {
+    val q = i * 100 / n
+    if (p != q) println(m + ": " + q + "%")
+    q
+  }
+
   case class Bug(override val toString: String) extends Exception
   case class Abort(override val toString: String) extends Exception
 }
@@ -36,6 +42,8 @@ trait Test {
           throw Bug("actual: " + a + " is unexpected (no match)")
       }
     }
+    
+    def fails = throws[Throwable]
 
     def throws[E <: Throwable](implicit ev: ClassTag[E]) {
       val r = try {

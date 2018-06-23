@@ -22,7 +22,15 @@ You can then write
         x throws[IOException]
     }
 
+Installation
+------------
+
+    sbt compile
+    sbt package
+    sbt publishLocal # if you want to use it in other projects locally
+
 Quick Reference
+---------------
 
 - `x expect y` compares an actual value `x` to an expected one `y` and requires
   these to be equal
